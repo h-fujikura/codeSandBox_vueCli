@@ -1,17 +1,85 @@
 <template>
-  <div id="app">
-    <img width="25%" src="./assets/logo.png">
-    <HelloWorld/>
+  <div id="demo">
+    <section>
+      <table>
+        <tr>
+          <th>商品名</th>
+          <th>単価</th>
+          <th>個数</th>
+          <th>行計</th>
+          <th></th>
+        </tr>
+        <tr v-for="(item, index) in items" 
+                :key="item.name" 
+                @del="removeData(index)">
+          <td>
+            <input  v-model="item.name" >
+          </td>
+          <td>
+            <input type="number" v-model.number="item.tanka" >
+          </td>
+          <td>
+            <input type="number" v-model.number="item.qty" >
+          </td>
+          <td class="taRight" >
+            {{item.qty * item.tanka}} 円
+          </td>
+          <td>
+            <button @click="removeData(index)">行削除</button>
+          </td>  
+        </tr>        
+        <tr>
+          <td colspan="2">計</td>
+          <td class="taRight">{{qtySum}}個</td>
+          <td class="taRight">{{uriageSum.toLocaleString()}} 円</td>
+          <td></td>
+        </tr>
+        </table>
+      <button @click="addRow">
+        行追加
+      </button>
+    </section>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld
+  data () {
+    return {
+      items: [
+      	{name: "りんご", tanka:100, qty:1 },
+      	{name: "バナナ", tanka:250, qty:2 },
+      	{name: "みかん", tanka:200, qty:3 },
+      	{name: "ぶどう", tanka:400, qty:4 }
+      ]
+    }
+  },
+  methods: {
+		removeData(idx) {
+			this.items.splice(idx,1)
+		},
+		addRow: function (){
+      this.items.push(
+        {name: '', tanka: null, qty: null }
+      )
+		}
+  },
+  computed: {
+    qtySum() {
+      let sum = 0
+      this.items.forEach(val => {
+        sum += val.qty
+      })
+      return sum
+    },
+    uriageSum() {
+      let sum = 0
+      this.items.forEach(obj => {
+        sum += obj.tanka * obj.qty
+      }) 
+      return sum
+    }
   }
 };
 </script>
@@ -24,5 +92,29 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  font-size: 16px;
+}
+section {
+  border-bottom: 2px solid #42b983;
+  padding: 1rem;
+}
+input {
+  text-align: right;
+  width: 90%;
+  font-size: 1rem;
+}
+table,
+td,
+th {
+  border: 1px solid #000;
+  border-collapse: collapse;
+}
+table {
+  table-layout: fixed;
+  width: 100%;
+  text-align: center;
+}
+td.taRight {
+  text-align: right;
 }
 </style>
