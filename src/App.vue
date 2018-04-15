@@ -10,10 +10,9 @@
           <th></th>
         </tr>
         <tr v-for="(item, index) in items" 
-                :key="item.name" 
-                @del="removeData(index)">
+                :key="item.name">
           <td>
-            <input  v-model="item.name" >
+            <input type="text" v-model="item.name" >
           </td>
           <td>
             <input type="number" v-model.number="item.tanka" >
