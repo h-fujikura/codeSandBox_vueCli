@@ -21,7 +21,7 @@
             <input type="number" v-model.number="item.qty" >
           </td>
           <td class="taRight" >
-            {{item.qty * item.tanka}} 円
+            {{addComma(item.qty * item.tanka)}} 円
           </td>
           <td>
             <button @click="removeData(index)">行削除</button>
@@ -30,7 +30,7 @@
         <tr>
           <td colspan="2">計</td>
           <td class="taRight">{{qtySum}}個</td>
-          <td class="taRight">{{uriageSum.toLocaleString()}} 円</td>
+          <td class="taRight">{{addComma(uriageSum)}} 円</td>
           <td></td>
         </tr>
         </table>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+const formatter = new Intl.NumberFormat('ja-JP');
 export default {
   name: "App",
   data () {
@@ -58,27 +59,26 @@ export default {
 		removeData(idx) {
 			this.items.splice(idx,1)
 		},
-		addRow: function (){
+		addRow(){
       this.items.push(
         {name: '', tanka: null, qty: null }
       )
-		}
+		},
+    addComma(num) {
+      return formatter.format(num)
+    }
   },
   computed: {
     qtySum() {
-      let sum = 0
-      this.items.forEach(val => {
-        sum += val.qty
-      })
-      return sum
+      return this.items.reduce((pre, cur) => {
+        return  pre + cur.qty
+      },0)
     },
     uriageSum() {
-      let sum = 0
-      this.items.forEach(obj => {
-        sum += obj.tanka * obj.qty
-      }) 
-      return sum
-    }
+      return this.items.reduce((pre, cur) => {
+        return  pre + cur.qty * cur.tanka
+      },0)
+    }  
   }
 };
 </script>
