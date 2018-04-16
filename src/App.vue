@@ -38,5 +38,4 @@ export default {
   margin-top: 60px;
   font-size: 16px;
 }
-
 </style>
